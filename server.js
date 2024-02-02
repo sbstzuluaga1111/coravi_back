@@ -24,7 +24,7 @@ app.post('/send-email', async (req, res) => {
 
     const mailOptions = {
       from: `"Nombre del remitente" <remitente@example.com>`,
-      to: 'remitente@example.com',
+      to: 'sbstzuluaga1111@gmail.com',
       subject: 'Nuevo formulario de sugerencias',
       html: `<p>Nombre: ${nombre}</p><p>Correo: ${correo}</p><p>Comentario: ${comentario}</p><p>Autorización: ${autorizacion ? 'Sí' : 'No'}</p>`,
     };
