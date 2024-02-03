@@ -23,7 +23,7 @@ app.post('/send-email', async (req, res) => {
 
     const mailOptions = {
       from: `"Nombre del remitente" <remitente@example.com>`,
-      to: 'sbstzuluaga1111@gmail.com',
+      to: 'serviciocoravi.sas@gmail.com',
       subject: 'Comentario',
       html: `
         <p>Nombre: ${nombre}</p>
@@ -66,7 +66,7 @@ app.post('/send-email-form2', async (req, res) => {
 
     const mailOptions = {
       from: `"Nombre del remitente" <remitente@example.com>`,
-      to: 'sbstzuluaga1111@gmail.com',
+      to: 'serviciocoravi.sas@gmail.com',
       subject: 'Agendamiento de cita',
       html: `
         <p>Nombre: ${nombre}</p>
@@ -75,6 +75,39 @@ app.post('/send-email-form2', async (req, res) => {
         <p>Comentario: ${comentario}</p>
         <p>Autorización de comunicaciones: ${autorizacion ? 'Sí' : 'No'}</p>
         <p>Fecha de la cita: ${formattedFecha}</p>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log('Correo enviado con éxito. URL del mensaje de prueba:', nodemailer.getTestMessageUrl(info));
+
+    res.status(200).send('Correo enviado con éxito');
+  } catch (error) {
+    console.error('Error al enviar el correo:', error);
+    res.status(500).send(error.toString());
+  }
+});
+
+app.post('/subscribe', async (req, res) => {
+  const { nombre, correo } = req.body;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"Nombre del remitente" <remitente@example.com>`,
+      to: 'sbstzuluaga1111@gmail.com', // Cambia esto al destinatario correcto
+      subject: 'Nueva suscripción',
+      html: `
+        <p>Nombre: ${nombre}</p>
+        <p>Correo: ${correo}</p>
       `,
     };
 
