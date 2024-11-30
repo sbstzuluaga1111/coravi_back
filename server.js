@@ -2,6 +2,7 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -9,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Ruta para enviar un correo con formulario 1
 app.post('/send-email', async (req, res) => {
   const { nombre, correo, comentario, autorizacion } = req.body;
 
@@ -44,7 +46,7 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-
+// Ruta para enviar un correo con formulario 2
 app.post('/send-email-form2', async (req, res) => {
   const { nombre, telefono, correo, comentario, autorizacion, fecha } = req.body;
 
@@ -57,7 +59,6 @@ app.post('/send-email-form2', async (req, res) => {
       },
     });
 
-    // Formatear la fecha
     const formattedFecha = new Date(fecha).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'long',
@@ -89,6 +90,7 @@ app.post('/send-email-form2', async (req, res) => {
   }
 });
 
+// Ruta para suscripciones
 app.post('/subscribe', async (req, res) => {
   const { nombre, correo } = req.body;
 
@@ -103,7 +105,7 @@ app.post('/subscribe', async (req, res) => {
 
     const mailOptions = {
       from: `"Nombre del remitente" <remitente@example.com>`,
-      to: 'sbstzuluaga1111@gmail.com', // Cambia esto al destinatario correcto
+      to: 'sbstzuluaga1111@gmail.com',
       subject: 'Nueva suscripción',
       html: `
         <p>Nombre: ${nombre}</p>
@@ -122,5 +124,17 @@ app.post('/subscribe', async (req, res) => {
   }
 });
 
+// Ruta para descargar un PDF
+app.get('/download-pdf', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'D.pdf'); // Cambia la ruta según la ubicación del archivo
+  res.download(filePath, 'CONSTRUIR PARA VENDER O ARRENDAR Guía esencial para maximizar tus inversiones inmobiliarias.pdf', (err) => {
+    if (err) {
+      console.error('Error al descargar el archivo:', err);
+      res.status(500).send('Error al descargar el archivo');
+    }
+  });
+});
+
+// Iniciar el servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
