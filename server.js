@@ -92,7 +92,7 @@ app.post('/send-email-form2', async (req, res) => {
 
 // Nueva ruta para la solicitud de descarga
 app.post('/solicitud-descarga', async (req, res) => {
-  const { nombre, correo } = req.body;
+  const { nombre, correo, telefono } = req.body;
 
   try {
     const transporter = nodemailer.createTransport({
@@ -110,6 +110,7 @@ app.post('/solicitud-descarga', async (req, res) => {
       html: `
         <p>Nombre: ${nombre}</p>
         <p>Correo: ${correo}</p>
+        <p>Teléfono: ${telefono}</p>
         <p>Solicitud de descarga del ebook</p>
       `,
     };
@@ -124,6 +125,7 @@ app.post('/solicitud-descarga', async (req, res) => {
     res.status(500).send(error.toString());
   }
 });
+
 
 // Ruta para suscripciones
 app.post('/subscribe', async (req, res) => {
