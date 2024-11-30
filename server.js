@@ -90,6 +90,41 @@ app.post('/send-email-form2', async (req, res) => {
   }
 });
 
+// Nueva ruta para la solicitud de descarga
+app.post('/solicitud-descarga', async (req, res) => {
+  const { nombre, correo } = req.body;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"Nombre del remitente" <remitente@example.com>`,
+      to: 'serviciocoravi.sas@gmail.com',
+      subject: 'Solicitud de Descarga',
+      html: `
+        <p>Nombre: ${nombre}</p>
+        <p>Correo: ${correo}</p>
+        <p>Solicitud de descarga del ebook</p>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log('Correo enviado con éxito. URL del mensaje de prueba:', nodemailer.getTestMessageUrl(info));
+
+    res.status(200).send('Correo enviado con éxito');
+  } catch (error) {
+    console.error('Error al enviar el correo:', error);
+    res.status(500).send(error.toString());
+  }
+});
+
 // Ruta para suscripciones
 app.post('/subscribe', async (req, res) => {
   const { nombre, correo } = req.body;
